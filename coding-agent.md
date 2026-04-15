@@ -18,277 +18,65 @@
 
 ---
 
-Pi is a minimal terminal coding harness. Adapt pi to your workflows, not the other way around, without having to fork and modify pi internals. Extend it with TypeScript [Extensions](#extensions), [Skills](#skills), [Prompt Templates](#prompt-templates), and [Themes](#themes). Put your extensions, skills, prompt templates, and themes in [Pi Packages](#pi-packages) and share them with others via npm or git.
+# Pi Monorepo
 
-Pi ships with powerful defaults but skips features like sub agents and plan mode. Instead, you can ask pi to build what you want or install a third party pi package that matches your workflow.
+> **在寻找 pi 编码代理吗？** 请查看 **[packages/coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)** 了解安装和使用方法。
 
-Pi runs in four modes: interactive, print or JSON, RPC for process integration, and an SDK for embedding in your own apps. See [openclaw/openclaw](https://github.com/openclaw/openclaw) for a real-world SDK integration.
+用于构建 AI 代理和管理 LLM 部署的工具。
 
-## Share your OSS coding agent sessions
+## 分享你的 OSS 编码代理会话
 
-If you use pi for open source work, please share your coding agent sessions.
+如果你在开源项目中使用 pi 或其他编码代理，请分享你的会话。
 
-Public OSS session data helps improve models, prompts, tools, and evaluations using real development workflows.
+公开的 OSS 会话数据有助于使用真实世界的任务、工具使用、故障和修复来改进编码代理，而不是使用玩具基准测试。
 
-For the full explanation, see [this post on X](https://x.com/badlogicgames/status/2037811643774652911).
+完整说明请参见 [X 上的这篇帖子](https://x.com/badlogicgames/status/2037811643774652911)。
 
-To publish sessions, use [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf). Read its README.md for setup instructions. All you need is a Hugging Face account, the Hugging Face CLI, and `pi-share-hf`.
+要发布会话，请使用 [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf)。请阅读其 README.md 获取安装说明。你只需要一个 Hugging Face 账户、Hugging Face CLI 和 `pi-share-hf`。
 
-You can also watch [this video](https://x.com/badlogicgames/status/2041151967695634619), where I show how I publish my `pi-mono` sessions.
+你也可以观看 [这个视频](https://x.com/badlogicgames/status/2041151967695634619)，其中我展示如何发布我的 `pi-mono` 会话。
 
-I regularly publish my own `pi-mono` work sessions here:
+我定期在这里发布我自己的 `pi-mono` 工作会话：
 
 - [badlogicgames/pi-mono on Hugging Face](https://huggingface.co/datasets/badlogicgames/pi-mono)
 
-## Table of Contents
+## Packages
 
-- [Quick Start](#quick-start)
-- [Providers & Models](#providers--models)
-- [Interactive Mode](#interactive-mode)
-  - [Editor](#editor)
-  - [Commands](#commands)
-  - [Keyboard Shortcuts](#keyboard-shortcuts)
-  - [Message Queue](#message-queue)
-- [Sessions](#sessions)
-  - [Branching](#branching)
-  - [Compaction](#compaction)
-- [Settings](#settings)
-- [Context Files](#context-files)
-- [Customization](#customization)
-  - [Prompt Templates](#prompt-templates)
-  - [Skills](#skills)
-  - [Extensions](#extensions)
-  - [Themes](#themes)
-  - [Pi Packages](#pi-packages)
-- [Programmatic Usage](#programmatic-usage)
-- [Philosophy](#philosophy)
-- [CLI Reference](#cli-reference)
-
----
-
-## Quick Start
-
-```bash
-npm install -g @mariozechner/pi-coding-agent
-```
-
-Authenticate with an API key:
-
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-pi
-```
-
-Or use your existing subscription:
-
-```bash
-pi
-/login  # Then select provider
-```
-
-Then just talk to pi. By default, pi gives the model four tools: `read`, `write`, `edit`, and `bash`. The model uses these to fulfill your requests. Add capabilities via [skills](#skills), [prompt templates](#prompt-templates), [extensions](#extensions), or [pi packages](#pi-packages).
-
-**Platform notes:** [Windows](docs/windows.md) | [Termux (Android)](docs/termux.md) | [tmux](docs/tmux.md) | [Terminal setup](docs/terminal-setup.md) | [Shell aliases](docs/shell-aliases.md)
-
----
-
-## Providers & Models
-
-For each built-in provider, pi maintains a list of tool-capable models, updated with every release. Authenticate via subscription (`/login`) or API key, then select any model from that provider via `/model` (or Ctrl+L).
-
-**Subscriptions:**
-- Anthropic Claude Pro/Max
-- OpenAI ChatGPT Plus/Pro (Codex)
-- GitHub Copilot
-- Google Gemini CLI
-- Google Antigravity
-
-**API keys:**
-- Anthropic
-- OpenAI
-- Azure OpenAI
-- Google Gemini
-- Google Vertex
-- Amazon Bedrock
-- Mistral
-- Groq
-- Cerebras
-- xAI
-- OpenRouter
-- Vercel AI Gateway
-- ZAI
-- OpenCode Zen
-- OpenCode Go
-- Hugging Face
-- Kimi For Coding
-- MiniMax
-
-See [docs/providers.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/providers.md) for detailed setup instructions.
-
-**Custom providers & models:** Add providers via `~/.pi/agent/models.json` if they speak a supported API (OpenAI, Anthropic, Google). For custom APIs or OAuth, use extensions. See [docs/models.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/models.md) and [docs/custom-provider.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/custom-provider.md).
-
----
-
-## Interactive Mode
-
-<p align="center"><img src="https://github.com/badlogic/pi-mono/blob/main/docs/images/interactive-mode.png" alt="Interactive Mode" width="600"></p>
-
-The interface from top to bottom:
-
-- **Startup header** - Shows shortcuts (`/hotkeys` for all), loaded AGENTS.md files, prompt templates, skills, and extensions
-- **Messages** - Your messages, assistant responses, tool calls and results, notifications, errors, and extension UI
-- **Editor** - Where you type; border color indicates thinking level
-- **Footer** - Working directory, session name, total token/cache usage, cost, context usage, current model
-
-The editor can be temporarily replaced by other UI, like built-in `/settings` or custom UI from extensions (e.g., a Q&A tool that lets the user answer model questions in a structured format). [Extensions](#extensions) can also replace the editor, add widgets above/below it, a status line, custom footer, or overlays.
-
-### Editor
-
-| Feature | How |
-|---------|-----|
-| File reference | Type `@` to fuzzy-search project files |
-| Path completion | Tab to complete paths |
-| Multi-line | Shift+Enter (or Ctrl+Enter on Windows Terminal) |
-| Images | Ctrl+V to paste (Alt+V on Windows), or drag onto terminal |
-| Bash commands | `!command` runs and sends output to LLM, `!!command` runs without sending |
-
-Standard editing keybindings for delete word, undo, etc. See [docs/keybindings.md](docs/keybindings.md).
-
-### Commands
-
-Type `/` in the editor to trigger commands. [Extensions](#extensions) can register custom commands, [skills](#skills) are available as `/skill:name`, and [prompt templates](#prompt-templates) expand via `/templatename`.
-
-| Command | Description |
+| Package | Description |
 |---------|-------------|
-| `/login`, `/logout` | OAuth authentication |
-| `/model` | Switch models |
-| `/scoped-models` | Enable/disable models for Ctrl+P cycling |
-| `/settings` | Thinking level, theme, message delivery, transport |
-| `/resume` | Pick from previous sessions |
-| `/new` | Start a new session |
-| `/name <name>` | Set session display name |
-| `/session` | Show session info (path, tokens, cost) |
-| `/tree` | Jump to any point in the session and continue from there |
-| `/fork` | Create a new session from the current branch |
-| `/compact [prompt]` | Manually compact context, optional custom instructions |
-| `/copy` | Copy last assistant message to clipboard |
-| `/export [file]` | Export session to HTML file |
-| `/share` | Upload as private GitHub gist with shareable HTML link |
-| `/reload` | Reload keybindings, extensions, skills, prompts, and context files (themes hot-reload automatically) |
-| `/hotkeys` | Show all keyboard shortcuts |
-| `/changelog` | Display version history |
-| `/quit` | Quit pi |
+| **[@mariozechner/pi-ai](https://github.com/badlogic/pi-mono/tree/main/packages/ai)** | Unified multi-provider LLM API (OpenAI, Anthropic, Google, etc.) |
+| **[@mariozechner/pi-agent-core](https://github.com/badlogic/pi-mono/tree/main/packages/agent)** | Agent runtime with tool calling and state management |
+| **[@mariozechner/pi-coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)** | Interactive coding agent CLI |
+| **[@mariozechner/pi-mom](https://github.com/badlogic/pi-mono/tree/main/packages/mom)** | Slack bot that delegates messages to the pi coding agent |
+| **[@mariozechner/pi-tui](https://github.com/badlogic/pi-mono/tree/main/packages/tui)** | Terminal UI library with differential rendering |
+| **[@mariozechner/pi-web-ui](https://github.com/badlogic/pi-mono/tree/main/packages/web-ui)** | Web components for AI chat interfaces |
+| **[@mariozechner/pi-pods](https://github.com/badlogic/pi-mono/tree/main/packages/pods)** | CLI for managing vLLM deployments on GPU pods |
 
-### Keyboard Shortcuts
+## 贡献指南
 
-See `/hotkeys` for the full list. Customize via `~/.pi/agent/keybindings.json`. See [docs/keybindings.md](docs/keybindings.md).
+请参阅 [CONTRIBUTING.md](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md) 了解贡献指南，以及 [AGENTS.md](https://github.com/badlogic/pi-mono/blob/main/AGENTS.md) 了解项目特定规则（适用于人类和代理）。
 
-**Commonly used:**
-
-| Key | Action |
-|-----|--------|
-| Ctrl+C | Clear editor |
-| Ctrl+C twice | Quit |
-| Escape | Cancel/abort |
-| Escape twice | Open `/tree` |
-| Ctrl+L | Open model selector |
-| Ctrl+P / Shift+Ctrl+P | Cycle scoped models forward/backward |
-| Shift+Tab | Cycle thinking level |
-| Ctrl+O | Collapse/expand tool output |
-| Ctrl+T | Collapse/expand thinking blocks |
-
-### Message Queue
-
-Submit messages while the agent is working:
-
-- **Enter** queues a *steering* message, delivered after the current assistant turn finishes executing its tool calls
-- **Alt+Enter** queues a *follow-up* message, delivered only after the agent finishes all work
-- **Escape** aborts and restores queued messages to editor
-- **Alt+Up** retrieves queued messages back to editor
-
-On Windows Terminal, `Alt+Enter` is fullscreen by default. Remap it in [docs/terminal-setup.md](docs/terminal-setup.md) so pi can receive the follow-up shortcut.
-
-Configure delivery in [settings](docs/settings.md): `steeringMode` and `followUpMode` can be `"one-at-a-time"` (default, waits for response) or `"all"` (delivers all queued at once). `transport` selects provider transport preference (`"sse"`, `"websocket"`, or `"auto"`) for providers that support multiple transports.
-
----
-
-## Sessions
-
-Sessions are stored as JSONL files with a tree structure. Each entry has an `id` and `parentId`, enabling in-place branching without creating new files. See [docs/session.md](docs/session.md) for file format.
-
-### Management
-
-Sessions auto-save to `~/.pi/agent/sessions/` organized by working directory.
+## 开发
 
 ```bash
-pi -c                  # Continue most recent session
-pi -r                  # Browse and select from past sessions
-pi --no-session        # Ephemeral mode (don't save)
-pi --session <path>    # Use specific session file or ID
-pi --fork <path>       # Fork specific session file or ID into a new session
+npm install          # 安装所有依赖项
+npm run build        # 构建所有包
+npm run check        # 代码检查、格式化和类型检查
+./test.sh            # 运行测试（跳过不需要 API 键的 LLM 相关测试）
+./pi-test.sh         # 从源代码运行 pi（可在任何目录执行）
 ```
 
-### Branching
+> **注意：** `npm run check` 需要先运行 `npm run build`。web-ui 包使用 `tsc`，需要依赖项编译后的 `.d.ts` 文件。
 
-**`/tree`** - Navigate the session tree in-place. Select any previous point, continue from there, and switch between branches. All history preserved in a single file.
+## 许可证
 
-<p align="center"><img src="https://github.com/badlogic/pi-mono/blob/main/docs/images/tree-view.png" alt="Tree View" width="600"></p>
+MIT
 
-- Search by typing, fold/unfold and jump between branches with Ctrl+←/Ctrl+→ or Alt+←/Alt+→, page with ←/→
-- Filter modes (Ctrl+O): default → no-tools → user-only → labeled-only → all
-- Press Shift+L to label entries as bookmarks and Shift+T to toggle label timestamps
-
-**`/fork`** - Create a new session file from the current branch. Opens a selector, copies history up to the selected point, and places that message in the editor for modification.
-
-**`--fork <path|id>`** - Fork an existing session file or partial session UUID directly from the CLI. This copies the full source session into a new session file in the current project.
-
-### Compaction
-
-Long sessions can exhaust context windows. Compaction summarizes older messages while keeping recent ones.
-
-**Manual:** `/compact` or `/compact <custom instructions>`
-
-**Automatic:** Enabled by default. Triggers on context overflow (recovers and retries) or when approaching the limit (proactive). Configure via `/settings` or `settings.json`.
-
-Compaction is lossy. The full history remains in the JSONL file; use `/tree` to revisit. Customize compaction behavior via [extensions](#extensions). See [docs/compaction.md](docs/compaction.md) for internals.
-
----
-
-## Settings
-
-Use `/settings` to modify common options, or edit JSON files directly:
-
-| Location | Scope |
-|----------|-------|
-| `~/.pi/agent/settings.json` | Global (all projects) |
-| `.pi/settings.json` | Project (overrides global) |
-
-See [docs/settings.md](docs/settings.md) for all options.
-
-To opt out of anonymous install/update telemetry tied to changelog detection, set `enableInstallTelemetry` to `false` in `settings.json`, or set `PI_TELEMETRY=0`.
-
----
-
-## Context Files
-
-Pi loads `AGENTS.md` (or `CLAUDE.md`) at startup from:
-- `~/.pi/agent/AGENTS.md` (global)
-- Parent directories (walking up from cwd)
-- Current directory
-
-Use for project instructions, conventions, common commands. All matching files are concatenated.
-
-### System Prompt
-
-Replace the default system prompt with `.pi/SYSTEM.md` (project) or `~/.pi/agent/SYSTEM.md` (global). Append without replacing via `APPEND_SYSTEM.md`.
-
----
-
-## Customization
+## 定制
 
 ### Prompt Templates
 
-Reusable prompts as Markdown files. Type `/name` to expand.
+可重用的提示作为 Markdown 文件。输入 `/name` 来展开。
 
 ```markdown
 <!-- ~/.pi/agent/prompts/review.md -->
@@ -296,29 +84,27 @@ Review this code for bugs, security issues, and performance problems.
 Focus on: {{focus}}
 ```
 
-Place in `~/.pi/agent/prompts/`, `.pi/prompts/`, or a [pi package](#pi-packages) to share with others. See [docs/prompt-templates.md](docs/prompt-templates.md).
+放置在 `~/.pi/agent/prompts/`、`.pi/prompts/`，或一个 [pi package](#pi-packages) 来与他人分享。请参阅 [docs/prompt-templates.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/prompt-templates.md)。
 
 ### Skills
 
-On-demand capability packages following the [Agent Skills standard](https://agentskills.io). Invoke via `/skill:name` or let the agent load them automatically.
+按需能力包遵循 [Agent Skills standard](https://agentskills.io)。通过 `/skill:name` 调用或让代理自动加载。
 
 ```markdown
 <!-- ~/.pi/agent/skills/my-skill/SKILL.md -->
 # My Skill
-Use this skill when the user asks about X.
+使用此技能当用户询问关于 X。
 
 ## Steps
 1. Do this
 2. Then that
 ```
 
-Place in `~/.pi/agent/skills/`, `~/.agents/skills/`, `.pi/skills/`, or `.agents/skills/` (from `cwd` up through parent directories) or a [pi package](#pi-packages) to share with others. See [docs/skills.md](docs/skills.md).
+放置在 `~/.pi/agent/skills/`、`~/.agents/skills/`、`.pi/skills/`，或 `.agents/skills/`（从 `cwd` 向上遍历父级目录）或一个 [pi package](#pi-packages) 来与他人分享。请参阅 [docs/skills.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/skills.md)。
 
 ### Extensions
 
-<p align="center"><img src="https://github.com/badlogic/pi-mono/blob/main/docs/images/doom-extension.png" alt="Doom Extension" width="600"></p>
-
-TypeScript modules that extend pi with custom tools, commands, keyboard shortcuts, event handlers, and UI components.
+TypeScript 模块，用于扩展 pi 的自定义工具、命令、键盘快捷键、事件处理器和 UI 组件。
 
 ```typescript
 export default function (pi: ExtensionAPI) {
@@ -328,55 +114,55 @@ export default function (pi: ExtensionAPI) {
 }
 ```
 
-**What's possible:**
-- Custom tools (or replace built-in tools entirely)
-- Sub-agents and plan mode
-- Custom compaction and summarization
-- Permission gates and path protection
-- Custom editors and UI components
-- Status lines, headers, footers
-- Git checkpointing and auto-commit
-- SSH and sandbox execution
-- MCP server integration
-- Make pi look like Claude Code
-- Games while waiting (yes, Doom runs)
-- ...anything you can dream up
+**可能的扩展：**
+- 自定义工具（或完全替换内置工具）
+- 子代理和计划模式
+- 自定义编译和摘要
+- 权限门和路径保护
+- 自定义编辑器和 UI 组件
+- 状态行、页眉、页脚
+- Git 检查点和自动提交
+- SSH 和沙箱执行
+- MCP 服务器集成
+- 让 pi 看起来像 Claude Code
+- 在等待时玩游戏（是的，Doom 可以运行）
+- ...任何你能想到的
 
-Place in `~/.pi/agent/extensions/`, `.pi/extensions/`, or a [pi package](#pi-packages) to share with others. See [docs/extensions.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/extensions.md) and [examples/extensions/](https://github.com/badlogic/pi-mono/tree/main/examples/extensions).
+放置在 `~/.pi/agent/extensions/`、`.pi/extensions/`，或一个 [pi package](#pi-packages) 来与他人分享。请参阅 [docs/extensions.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/extensions.md) 和 [examples/extensions/](https://github.com/badlogic/pi-mono/tree/main/examples/extensions)。
 
 ### Themes
 
-Built-in: `dark`, `light`. Themes hot-reload: modify the active theme file and pi immediately applies changes.
+内置：`dark`、`light`。主题热重载：修改活动主题文件，pi 立即应用更改。
 
-Place in `~/.pi/agent/themes/`, `.pi/themes/`, or a [pi package](#pi-packages) to share with others. See [docs/themes.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/themes.md).
+放置在 `~/.pi/agent/themes/`、`.pi/themes/`，或一个 [pi package](#pi-packages) 来与他人分享。请参阅 [docs/themes.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/themes.md)。
 
 ### Pi Packages
 
-Bundle and share extensions, skills, prompts, and themes via npm or git. Find packages on [npmjs.com](https://www.npmjs.com/search?q=keywords%3Api-package) or [Discord](https://discord.com/channels/1456806362351669492/1457744485428629628).
+通过 npm 或 git 打包和共享扩展、技能、提示和主题。查找 npm 上的包：[npmjs.com](https://www.npmjs.com/search?q=keywords%3Api-package) 或 [Discord](https://discord.com/channels/1456806362351669492/1457744485428629628)。
 
-> **Security:** Pi packages run with full system access. Extensions execute arbitrary code, and skills can instruct the model to perform any action including running executables. Review source code before installing third-party packages.
+> **安全性：** Pi 包以完全的系统权限运行。扩展执行任意代码，技能可以指导模型执行任何操作，包括运行可执行文件。在安装第三方包之前，请审查源代码。
 
 ```bash
 pi install npm:@foo/pi-tools
-pi install npm:@foo/pi-tools@1.2.3      # pinned version
+pi install npm:@foo/pi-tools@1.2.3      # 固定版本
 pi install git:github.com/user/repo
-pi install git:github.com/user/repo@v1  # tag or commit
+pi install git:github.com/user/repo@v1  # 标签或提交
 pi install git:git@github.com:user/repo
-pi install git:git@github.com:user/repo@v1  # tag or commit
+pi install git:git@github.com:user/repo@v1  # 标签或提交
 pi install https://github.com/user/repo
-pi install https://github.com/user/repo@v1      # tag or commit
+pi install https://github.com/user/repo@v1      # 标签或提交
 pi install ssh://git@github.com/user/repo
-pi install ssh://git@github.com/user/repo@v1    # tag or commit
+pi install ssh://git@github.com/user/repo@v1    # 标签或提交
 pi remove npm:@foo/pi-tools
-pi uninstall npm:@foo/pi-tools          # alias for remove
+pi uninstall npm:@foo/pi-tools          # 别名用于移除
 pi list
-pi update                               # skips pinned packages
-pi config                               # enable/disable extensions, skills, prompts, themes
+pi update                               # 跳过固定包
+pi config                               # 启用/禁用扩展、技能、提示、主题
 ```
 
-Packages install to `~/.pi/agent/git/` (git) or global npm. Use `-l` for project-local installs (`.pi/git/`, `.pi/npm/`). If you use a Node version manager and want package installs to reuse a stable npm context, set `npmCommand` in `settings.json`, for example `["mise", "exec", "node@20", "--", "npm"]`.
+包安装到 `~/.pi/agent/git/`（git）或全局 npm。使用 `-l` 进行项目本地安装（`.pi/git/`、`.pi/npm/`）。如果您使用 Node 版本管理器并希望包安装重用稳定的 npm 上下文，请在 `settings.json` 中设置 `npmCommand`，例如 `["mise", "exec", "node@20", "--", "npm"]`。
 
-Create a package by adding a `pi` key to `package.json`:
+通过添加 `pi` 键到 `package.json` 创建包：
 
 ```json
 {
@@ -391,9 +177,9 @@ Create a package by adding a `pi` key to `package.json`:
 }
 ```
 
-Without a `pi` manifest, pi auto-discovers from conventional directories (`extensions/`, `skills/`, `prompts/`, `themes/`).
+如果没有 `pi` 清单，pi 会自动从常规目录（`extensions/`、`skills/`、`prompts/`、`themes/`）中发现。
 
-See [docs/packages.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/packages.md).
+请参阅 [docs/packages.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/packages.md)。
 
 ---
 
@@ -412,44 +198,44 @@ const { session } = await createAgentSession({
   modelRegistry,
 });
 
-await session.prompt("What files are in the current directory?");
+await session.prompt("当前目录中有哪些文件？");
 ```
 
-For advanced multi-session runtime replacement, use `createAgentSessionRuntime()` and `AgentSessionRuntime`.
+对于高级的多会话运行时替换，使用 `createAgentSessionRuntime()` 和 `AgentSessionRuntime`。
 
-See [docs/sdk.md](docs/sdk.md) and [examples/sdk/](examples/sdk/).
+请参阅 [docs/sdk.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/sdk.md) 和 [examples/sdk/](examples/sdk/)。
 
 ### RPC Mode
 
-For non-Node.js integrations, use RPC mode over stdin/stdout:
+对于非 Node.js 集成，使用 RPC 模式通过 stdin/stdout：
 
 ```bash
 pi --mode rpc
 ```
 
-RPC mode uses strict LF-delimited JSONL framing. Clients must split records on `\n` only. Do not use generic line readers like Node `readline`, which also split on Unicode separators inside JSON payloads.
+RPC 模式使用严格的基于 LF 的 JSONL 帧格式。客户端必须仅按 `\n` 分割记录。不要使用通用的行读取器，比如 Node 的 `readline`，它也会在 JSON 有效负载内按 Unicode 分隔符分割。
 
-See [docs/rpc.md](docs/rpc.md) for the protocol.
+请参阅 [docs/rpc.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/rpc.md) 了解协议。
 
 ---
 
 ## Philosophy
 
-Pi is aggressively extensible so it doesn't have to dictate your workflow. Features that other tools bake in can be built with [extensions](#extensions), [skills](#skills), or installed from third-party [pi packages](#pi-packages). This keeps the core minimal while letting you shape pi to fit how you work.
+Pi 是高度可扩展的，因此它不需要指定你的工作流程。可以使用 [extensions](#extensions)、[skills](#skills) 或从第三方安装 [pi packages](#pi-packages) 来构建功能，而核心保持最小，让你能够按照自己的工作方式塑造 pi。
 
-**No MCP.** Build CLI tools with READMEs (see [Skills](#skills)), or build an extension that adds MCP support. [Why?](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/)
+**没有 MCP。** 使用 README 构建 CLI 工具（请参阅 [Skills](#skills)），或构建一个扩展来添加 MCP 支持。[为什么？](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/)
 
-**No sub-agents.** There's many ways to do this. Spawn pi instances via tmux, or build your own with [extensions](#extensions), or install a package that does it your way.
+**没有子代理。** 有很多方法可以做到这一点。通过 tmux 启动 pi 实例，或者使用 [extensions](#extensions) 构建你自己的，或者安装一个按照你的方式工作的包。
 
-**No permission popups.** Run in a container, or build your own confirmation flow with [extensions](#extensions) inline with your environment and security requirements.
+**没有权限弹出窗口。** 在容器中运行，或使用 [extensions](#extensions) 构建自己的确认流程，以符合你的环境和安全要求。
 
-**No plan mode.** Write plans to files, or build it with [extensions](#extensions), or install a package.
+**没有计划模式。** 将计划写入文件，或者使用 [extensions](#extensions) 构建它，或者安装一个包。
 
-**No built-in to-dos.** They confuse models. Use a TODO.md file, or build your own with [extensions](#extensions).
+**没有内置的待办事项。** 它们会混淆模型。使用 TODO.md 文件，或者使用 [extensions](#extensions) 构建你自己的。
 
-**No background bash.** Use tmux. Full observability, direct interaction.
+**没有后台 bash。** 使用 tmux。完全可观察，直接互动。
 
-Read the [blog post](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) for the full rationale.
+阅读 [博客文章](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) 了解完整理由。
 
 ---
 
@@ -462,143 +248,143 @@ pi [options] [@files...] [messages...]
 ### Package Commands
 
 ```bash
-pi install <source> [-l]     # Install package, -l for project-local
-pi remove <source> [-l]      # Remove package
-pi uninstall <source> [-l]   # Alias for remove
-pi update [source]           # Update packages (skips pinned)
-pi list                      # List installed packages
-pi config                    # Enable/disable package resources
+pi install <source> [-l]     # 安装包，-l 表示项目本地
+pi remove <source> [-l]      # 移除包
+pi uninstall <source> [-l]   # 移除包的别名
+pi update [source]           # 更新包（跳过固定包）
+pi list                      # 列出已安装的包
+pi config                    # 启用/禁用包资源
 ```
 
-### Modes
+### 模式
 
-| Flag | Description |
+| Flag | 描述 |
 |------|-------------|
-| (default) | Interactive mode |
-| `-p`, `--print` | Print response and exit |
-| `--mode json` | Output all events as JSON lines (see [docs/json.md](docs/json.md)) |
-| `--mode rpc` | RPC mode for process integration (see [docs/rpc.md](docs/rpc.md)) |
-| `--export <in> [out]` | Export session to HTML |
+| (default) | 交互模式 |
+| `-p`, `--print` | 打印响应并退出 |
+| `--mode json` | 以 JSON 行输出所有事件（请参阅 [docs/json.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/json.md)） |
+| `--mode rpc` | 用于进程集成的 RPC 模式（请参阅 [docs/rpc.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/rpc.md)） |
+| `--export <in> [out]` | 导出会话为 HTML 文件 |
 
-In print mode, pi also reads piped stdin and merges it into the initial prompt:
+在打印模式下，pi 还会读取通过管道传入的 stdin 并将其合并到初始提示中：
 
 ```bash
-cat README.md | pi -p "Summarize this text"
+cat README.md | pi -p "总结此文本"
 ```
 
-### Model Options
+### 模型选项
 
-| Option | Description |
-|--------|-------------|
-| `--provider <name>` | Provider (anthropic, openai, google, etc.) |
-| `--model <pattern>` | Model pattern or ID (supports `provider/id` and optional `:<thinking>`) |
-| `--api-key <key>` | API key (overrides env vars) |
-| `--thinking <level>` | `off`, `minimal`, `low`, `medium`, `high`, `xhigh` |
-| `--models <patterns>` | Comma-separated patterns for Ctrl+P cycling |
-| `--list-models [search]` | List available models |
+| 选项 | 描述 |
+|------|-------------|
+| `--provider <name>` | 提供者（anthropic、openai、google 等） |
+| `--model <pattern>` | 模型模式或 ID（支持 `provider/id` 和可选的 `:<thinking>`） |
+| `--api-key <key>` | API 密钥（覆盖环境变量） |
+| `--thinking <level>` | `off`、`minimal`、`low`、`medium`、`high`、`xhigh` |
+| `--models <patterns>` | 用于 Ctrl+P 循环的逗号分隔模式 |
+| `--list-models [search]` | 列出可用的模型 |
 
-### Session Options
+### 会话选项
 
-| Option | Description |
-|--------|-------------|
-| `-c`, `--continue` | Continue most recent session |
-| `-r`, `--resume` | Browse and select session |
-| `--session <path>` | Use specific session file or partial UUID |
-| `--fork <path>` | Fork specific session file or partial UUID into a new session |
-| `--session-dir <dir>` | Custom session storage directory |
-| `--no-session` | Ephemeral mode (don't save) |
+| 选项 | 描述 |
+|------|-------------|
+| `-c`, `--continue` | 继续最近一次会话 |
+| `-r`, `--resume` | 浏览并选择会话 |
+| `--session <path>` | 使用特定的会话文件或部分 UUID |
+| `--fork <path>` | 从当前分支 Fork 一个特定的会话文件或部分 UUID 到一个新会话 |
+| `--session-dir <dir>` | 自定义会话存储目录 |
+| `--no-session` | 临时模式（不保存） |
 
-### Tool Options
+### 工具选项
 
-| Option | Description |
-|--------|-------------|
-| `--tools <list>` | Enable specific built-in tools (default: `read,bash,edit,write`) |
-| `--no-tools` | Disable all built-in tools (extension tools still work) |
+| 选项 | 描述 |
+|------|-------------|
+| `--tools <list>` | 启用特定的内置工具（默认：`read,bash,edit,write`） |
+| `--no-tools` | 禁用所有内置工具（扩展工具仍有效） |
 
-Available built-in tools: `read`, `bash`, `edit`, `write`, `grep`, `find`, `ls`
+可用的内置工具：`read`、`bash`、`edit`、`write`、`grep`、`find`、`ls`
 
-### Resource Options
+### 资源选项
 
-| Option | Description |
-|--------|-------------|
-| `-e`, `--extension <source>` | Load extension from path, npm, or git (repeatable) |
-| `--no-extensions` | Disable extension discovery |
-| `--skill <path>` | Load skill (repeatable) |
-| `--no-skills` | Disable skill discovery |
-| `--prompt-template <path>` | Load prompt template (repeatable) |
-| `--no-prompt-templates` | Disable prompt template discovery |
-| `--theme <path>` | Load theme (repeatable) |
-| `--no-themes` | Disable theme discovery |
+| 选项 | 描述 |
+|------|-------------|
+| `-e`, `--extension <source>` | 从路径、npm 或 git 加载扩展（可重复） |
+| `--no-extensions` | 禁用扩展发现 |
+| `--skill <path>` | 加载技能（可重复） |
+| `--no-skills` | 禁用技能发现 |
+| `--prompt-template <path>` | 加载提示模板（可重复） |
+| `--no-prompt-templates` | 禁用提示模板发现 |
+| `--theme <path>` | 加载主题（可重复） |
+| `--no-themes` | 禁用主题发现 |
 
-Combine `--no-*` with explicit flags to load exactly what you need, ignoring settings.json (e.g., `--no-extensions -e ./my-ext.ts`).
+将 `--no-*` 与显式标志结合以加载您需要的内容，忽略 settings.json（例如 `--no-extensions -e ./my-ext.ts`）。
 
-### Other Options
+### 其他选项
 
-| Option | Description |
-|--------|-------------|
-| `--system-prompt <text>` | Replace default prompt (context files and skills still appended) |
-| `--append-system-prompt <text>` | Append to system prompt |
-| `--verbose` | Force verbose startup |
-| `-h`, `--help` | Show help |
-| `-v`, `--version` | Show version |
+| 选项 | 描述 |
+|------|-------------|
+| `--system-prompt <text>` | 替换默认提示（上下文文件和技能仍会被追加） |
+| `--append-system-prompt <text>` | 附加到系统提示 |
+| `--verbose` | 强制详细启动 |
+| `-h`, `--help` | 显示帮助 |
+| `-v`, `--version` | 显示版本 |
 
-### File Arguments
+### 文件参数
 
-Prefix files with `@` to include in the message:
+使用 `@` 前缀将文件包含在消息中：
 
 ```bash
-pi @prompt.md "Answer this"
-pi -p @screenshot.png "What's in this image?"
-pi @code.ts @test.ts "Review these files"
+pi @prompt.md "回答这个"
+pi -p @screenshot.png "这张图片里有什么？"
+pi @code.ts @test.ts "审查这些文件"
 ```
 
-### Examples
+### 示例
 
 ```bash
-# Interactive with initial prompt
-pi "List all .ts files in src/"
+# 带初始提示的交互模式
+pi "列出 src/ 目录中所有的 .ts 文件"
 
-# Non-interactive
-pi -p "Summarize this codebase"
+# 非交互模式
+pi -p "总结这个代码库"
 
-# Non-interactive with piped stdin
-cat README.md | pi -p "Summarize this text"
+# 通过管道输入的非交互模式
+cat README.md | pi -p "总结此文本"
 
-# Different model
-pi --provider openai --model gpt-4o "Help me refactor"
+# 不同的模型
+pi --provider openai --model gpt-4o "帮我重构代码"
 
-# Model with provider prefix (no --provider needed)
-pi --model openai/gpt-4o "Help me refactor"
+# 带提供商标识符的模型（不需要 --provider）
+pi --model openai/gpt-4o "帮我重构代码"
 
-# Model with thinking level shorthand
-pi --model sonnet:high "Solve this complex problem"
+# 模型思维等级简写
+pi --model sonnet:high "解决这个复杂问题"
 
-# Limit model cycling
+# 限制模型循环
 pi --models "claude-*,gpt-4o"
 
-# Read-only mode
+# 只读模式
 pi --tools read,grep,find,ls -p "Review the code"
 
-# High thinking level
-pi --thinking high "Solve this complex problem"
+# 高思维等级
+pi --thinking high "解决这个复杂问题"
 ```
 
-### Environment Variables
+### 环境变量
 
-| Variable | Description |
-|----------|-------------|
-| `PI_CODING_AGENT_DIR` | Override config directory (default: `~/.pi/agent`) |
-| `PI_PACKAGE_DIR` | Override package directory (useful for Nix/Guix where store paths tokenize poorly) |
-| `PI_SKIP_VERSION_CHECK` | Skip version check at startup |
-| `PI_TELEMETRY` | Override install telemetry. Use `1`/`true`/`yes` to enable or `0`/`false`/`no` to disable |
-| `PI_CACHE_RETENTION` | Set to `long` for extended prompt cache (Anthropic: 1h, OpenAI: 24h) |
-| `VISUAL`, `EDITOR` | External editor for Ctrl+G |
+| 变量 | 描述 |
+|------|-------------|
+| `PI_CODING_AGENT_DIR` | 覆盖配置目录（默认：`~/.pi/agent`） |
+| `PI_PACKAGE_DIR` | 覆盖包目录（对 Nix/Guix 有用，其中存储路径 token 化较差） |
+| `PI_SKIP_VERSION_CHECK` | 启动时跳过版本检查 |
+| `PI_TELEMETRY` | 覆盖安装遥测。使用 `1`/`true`/`yes` 启用或 `0`/`false`/`no` 禁用 |
+| `PI_CACHE_RETENTION` | 设置为 `long` 以延长提示缓存（Anthropic: 1h，OpenAI: 24h） |
+| `VISUAL`, `EDITOR` | 用于 Ctrl+G 的外部编辑器 |
 
 ---
 
 ## Contributing & Development
 
-See [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines and [docs/development.md](docs/development.md) for setup, forking, and debugging.
+请参阅 [CONTRIBUTING.md](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md) 了解指南，以及 [docs/development.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/development.md) 了解设置、Fork 和调试。
 
 ---
 
