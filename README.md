@@ -17,6 +17,8 @@
 
 ---
 
+> 本项目汉化自 [badlogic/pi-mono](https://github.com/badlogic/pi-mono)
+
 # Pi Monorepo
 
 > **寻找 pi 编码智能体？** 请参阅 **[packages/coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)** 了解安装和使用方法。
