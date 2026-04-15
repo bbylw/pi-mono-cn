@@ -86,9 +86,9 @@ pi
 /login  # Then select provider
 ```
 
-Then just talk to pi. By default, pi gives the model four tools: `read`, `write`, `edit`, and `bash`. The model uses these to fulfill your requests. Add capabilities via [skills](#skills), [prompt templates](#prompt-templates), [extensions](#extensions), or [pi packages](#pi-packages).
+Then just talk to pi. By default, pi gives the model four tools: `read`, `write`, `edit`, and `bash`. The model uses these to fulfill your requests. Add capabilities via [skills](https://github.com/badlogic/pi-mono/blob/main/docs/skills.md), [prompt templates](https://github.com/badlogic/pi-mono/blob/main/docs/prompt-templates.md), [extensions](https://github.com/badlogic/pi-mono/blob/main/docs/extensions.md), or [pi packages](https://github.com/badlogic/pi-mono/blob/main/docs/packages.md).
 
-**Platform notes:** [Windows](docs/windows.md) | [Termux (Android)](docs/termux.md) | [tmux](docs/tmux.md) | [Terminal setup](docs/terminal-setup.md) | [Shell aliases](docs/shell-aliases.md)
+**Platform notes:** [Windows](https://github.com/badlogic/pi-mono/blob/main/docs/windows.md) | [Termux (Android)](https://github.com/badlogic/pi-mono/blob/main/docs/termux.md) | [tmux](https://github.com/badlogic/pi-mono/blob/main/docs/tmux.md) | [Terminal setup](https://github.com/badlogic/pi-mono/blob/main/docs/terminal-setup.md) | [Shell aliases](https://github.com/badlogic/pi-mono/blob/main/docs/shell-aliases.md)
 
 ---
 
@@ -152,7 +152,7 @@ The editor can be temporarily replaced by other UI, like built-in `/settings` or
 | Images | Ctrl+V to paste (Alt+V on Windows), or drag onto terminal |
 | Bash commands | `!command` runs and sends output to LLM, `!!command` runs without sending |
 
-Standard editing keybindings for delete word, undo, etc. See [docs/keybindings.md](docs/keybindings.md).
+Standard editing keybindings for delete word, undo, etc. See [docs/keybindings.md](https://github.com/badlogic/pi-mono/blob/main/docs/keybindings.md).
 
 ### Commands
 
@@ -181,7 +181,7 @@ Type `/` in the editor to trigger commands. [Extensions](#extensions) can regist
 
 ### Keyboard Shortcuts
 
-See `/hotkeys` for the full list. Customize via `~/.pi/agent/keybindings.json`. See [docs/keybindings.md](docs/keybindings.md).
+See `/hotkeys` for the full list. Customize via `~/.pi/agent/keybindings.json`. See [docs/keybindings.md](https://github.com/badlogic/pi-mono/blob/main/docs/keybindings.md).
 
 **Commonly used:**
 
@@ -206,7 +206,7 @@ Submit messages while the agent is working:
 - **Escape** aborts and restores queued messages to editor
 - **Alt+Up** retrieves queued messages back to editor
 
-On Windows Terminal, `Alt+Enter` is fullscreen by default. Remap it in [docs/terminal-setup.md](docs/terminal-setup.md) so pi can receive the follow-up shortcut.
+On Windows Terminal, `Alt+Enter` is fullscreen by default. Remap it in [docs/terminal-setup.md](https://github.com/badlogic/pi-mono/blob/main/docs/terminal-setup.md) so pi can receive the follow-up shortcut.
 
 Configure delivery in [settings](docs/settings.md): `steeringMode` and `followUpMode` can be `"one-at-a-time"` (default, waits for response) or `"all"` (delivers all queued at once). `transport` selects provider transport preference (`"sse"`, `"websocket"`, or `"auto"`) for providers that support multiple transports.
 
@@ -263,7 +263,7 @@ Use `/settings` to modify common options, or edit JSON files directly:
 | `~/.pi/agent/settings.json` | Global (all projects) |
 | `.pi/settings.json` | Project (overrides global) |
 
-See [docs/settings.md](docs/settings.md) for all options.
+See [docs/settings.md](https://github.com/badlogic/pi-mono/blob/main/docs/settings.md) for all options.
 
 To opt out of anonymous install/update telemetry tied to changelog detection, set `enableInstallTelemetry` to `false` in `settings.json`, or set `PI_TELEMETRY=0`.
 
@@ -296,7 +296,7 @@ Review this code for bugs, security issues, and performance problems.
 Focus on: {{focus}}
 ```
 
-Place in `~/.pi/agent/prompts/`, `.pi/prompts/`, or a [pi package](#pi-packages) to share with others. See [docs/prompt-templates.md](docs/prompt-templates.md).
+Place in `~/.pi/agent/prompts/`, `.pi/prompts/`, or a [pi package](#pi-packages) to share with others. See [docs/prompt-templates.md](https://github.com/badlogic/pi-mono/blob/main/docs/prompt-templates.md).
 
 ### Skills
 
@@ -312,7 +312,7 @@ Use this skill when the user asks about X.
 2. Then that
 ```
 
-Place in `~/.pi/agent/skills/`, `~/.agents/skills/`, `.pi/skills/`, or `.agents/skills/` (from `cwd` up through parent directories) or a [pi package](#pi-packages) to share with others. See [docs/skills.md](docs/skills.md).
+Place in `~/.pi/agent/skills/`, `~/.agents/skills/`, `.pi/skills/`, or `.agents/skills/` (from `cwd` up through parent directories) or a [pi package](#pi-packages) to share with others. See [docs/skills.md](https://github.com/badlogic/pi-mono/blob/main/docs/skills.md).
 
 ### Extensions
 
@@ -342,13 +342,13 @@ export default function (pi: ExtensionAPI) {
 - Games while waiting (yes, Doom runs)
 - ...anything you can dream up
 
-Place in `~/.pi/agent/extensions/`, `.pi/extensions/`, or a [pi package](#pi-packages) to share with others. See [docs/extensions.md](docs/extensions.md) and [examples/extensions/](examples/extensions/).
+Place in `~/.pi/agent/extensions/`, `.pi/extensions/`, or a [pi package](#pi-packages) to share with others. See [docs/extensions.md](https://github.com/badlogic/pi-mono/blob/main/docs/extensions.md) and [examples/extensions/](https://github.com/badlogic/pi-mono/tree/main/examples/extensions).
 
 ### Themes
 
 Built-in: `dark`, `light`. Themes hot-reload: modify the active theme file and pi immediately applies changes.
 
-Place in `~/.pi/agent/themes/`, `.pi/themes/`, or a [pi package](#pi-packages) to share with others. See [docs/themes.md](docs/themes.md).
+Place in `~/.pi/agent/themes/`, `.pi/themes/`, or a [pi package](#pi-packages) to share with others. See [docs/themes.md](https://github.com/badlogic/pi-mono/blob/main/docs/themes.md).
 
 ### Pi Packages
 
@@ -393,7 +393,7 @@ Create a package by adding a `pi` key to `package.json`:
 
 Without a `pi` manifest, pi auto-discovers from conventional directories (`extensions/`, `skills/`, `prompts/`, `themes/`).
 
-See [docs/packages.md](docs/packages.md).
+See [docs/packages.md](https://github.com/badlogic/pi-mono/blob/main/docs/packages.md).
 
 ---
 
