@@ -8,34 +8,34 @@
   <a href="https://github.com/badlogic/pi-mono/actions/workflows/ci.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/badlogic/pi-mono/ci.yml?style=flat-square&branch=main" /></a>
 </p>
 <p align="center">
-  <a href="https://pi.dev">pi.dev</a> 域名由以下方慷慨捐赠
+  <a href="https://pi.dev">pi.dev</a> domain graciously donated by
   <br /><br />
-  <a href="https://exe.dev"><img src="packages/coding-agent/docs/images/exy.png" alt="Exy mascot" width="48" /><br />exe.dev</a>
+  <a href="https://exe.dev"><img src="https://raw.githubusercontent.com/badlogic/pi-mono/main/packages/coding-agent/docs/images/exy.png" alt="Exy mascot" width="48" /><br />exe.dev</a>
 </p>
 
->> 默认情况下，来自新贡献者的新问题和拉取请求会被自动关闭。维护者会每天审查自动关闭的问题。请参阅 [CONTRIBUTING.md](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md)。
+> New issues and PRs from new contributors are auto-closed by default. Maintainers review auto-closed issues daily. See [CONTRIBUTING.md](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md).
 
 ---
 
 # Pi Monorepo
 
-> **在寻找 pi 编码代理吗？** 请查看 **[packages/coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)** 了解安装和使用方法。
+> **Looking for the pi coding agent?** See **[packages/coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)** for installation and usage.
 
-用于构建 AI 代理和管理 LLM 部署的工具。
+Tools for building AI agents and managing LLM deployments.
 
-## 分享你的 OSS 编码代理会话
+## Share your OSS coding agent sessions
 
-如果你在开源项目中使用 pi 或其他编码代理，请分享你的会话。
+If you use pi or other coding agents for open source work, please share your sessions.
 
-公开的 OSS 会话数据有助于使用真实世界的任务、工具使用、故障和修复来改进编码代理，而不是使用玩具基准测试。
+Public OSS session data helps improve coding agents with real-world tasks, tool use, failures, and fixes instead of toy benchmarks.
 
-完整说明请参见 [X 上的这篇帖子](https://x.com/badlogicgames/status/2037811643774652911)。
+For the full explanation, see [this post on X](https://x.com/badlogicgames/status/2037811643774652911).
 
-要发布会话，请使用 [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf)。请阅读其 README.md 获取安装说明。你只需要一个 Hugging Face 账户、Hugging Face CLI 和 `pi-share-hf`。
+To publish sessions, use [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf). Read its README.md for setup instructions. All you need is a Hugging Face account, the Hugging Face CLI, and `pi-share-hf`.
 
-你也可以观看 [这个视频](https://x.com/badlogicgames/status/2041151967695634619)，其中我展示如何发布我的 `pi-mono` 会话。
+You can also watch [this video](https://x.com/badlogicgames/status/2041151967695634619), where I show how I publish my `pi-mono` sessions.
 
-我定期在这里发布我自己的 `pi-mono` 工作会话：
+I regularly publish my own `pi-mono` work sessions here:
 
 - [badlogicgames/pi-mono on Hugging Face](https://huggingface.co/datasets/badlogicgames/pi-mono)
 
@@ -51,22 +51,22 @@
 | **[@mariozechner/pi-web-ui](https://github.com/badlogic/pi-mono/tree/main/packages/web-ui)** | Web components for AI chat interfaces |
 | **[@mariozechner/pi-pods](https://github.com/badlogic/pi-mono/tree/main/packages/pods)** | CLI for managing vLLM deployments on GPU pods |
 
-## 贡献指南
+## Contributing
 
-请参阅 [CONTRIBUTING.md](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md) 了解贡献指南，以及 [AGENTS.md](https://github.com/badlogic/pi-mono/blob/main/AGENTS.md) 了解项目特定规则（适用于人类和代理）。
+See [CONTRIBUTING.md](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md) for contribution guidelines and [AGENTS.md](https://github.com/badlogic/pi-mono/blob/main/AGENTS.md) for project-specific rules (for both humans and agents).
 
-## 开发
+## Development
 
 ```bash
-npm install          # 安装所有依赖项
-npm run build        # 构建所有包
-npm run check        # 代码检查、格式化和类型检查
-./test.sh            # 运行测试（跳过不需要 API 键的 LLM 相关测试）
-./pi-test.sh         # 从源代码运行 pi（可在任何目录执行）
+npm install          # Install all dependencies
+npm run build        # Build all packages
+npm run check        # Lint, format, and type check
+./test.sh            # Run tests (skips LLM-dependent tests without API keys)
+./pi-test.sh         # Run pi from sources (can be run from any directory)
 ```
 
-> **注意：** `npm run check` 需要先运行 `npm run build`。web-ui 包使用 `tsc`，需要依赖项编译后的 `.d.ts` 文件。
+> **Note:** `npm run check` requires `npm run build` to be run first. The web-ui package uses `tsc` which needs compiled `.d.ts` files from dependencies.
 
-## 许可证
+## License
 
 MIT
